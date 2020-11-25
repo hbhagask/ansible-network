@@ -1,0 +1,58 @@
+---
+- name: BASIC ROUTER CONFIGURATION
+  hosts: all
+  gather_facts: false
+
+  tasks:
+  - name: CONFIGURE LOGIN BANNER
+    ios_banner:
+      banner: login
+      text: |
+        ***Authorized Login Only***
+      state: present
+    tags:
+      - base
+
+  - name: CONFIGURE HOSTNAME & DNS
+    ios_system:
+     hostname: "{{ hostname }}"
+     lookup_enabled: no
+     name_servers:
+     - 8.8.8.8
+     - 8.8.4.4
+    tags:
+      - base
+
+  - name: CONFIGURE IP ADDRESSING
+    ios_l3_interfaces:
+      config:
+      - name: "{{ item.name }}"
+        ipv4:
+        - address: "{{ item.address }}"
+      state: merged
+    loop: "{{ interfaces }}"
+    tags:
+      - base
+
+  - name: MAKE INTERFACE UP
+    cisco.ios.ios_interface:
+      name: "{{ item.name }}"
+      description: "{{ item.desc }}"
+      enabled: true
+    loop: "{{ interfaces }}"
+    tags:
+      - base
+
+  - name: CONFIGURE OSPFV2
+    ios_config:
+      parents: router ospf {{ item.process_id }}
+      lines:
+        - network {{ item.network }} area {{ item.area }}
+    loop: "{{ ospf_networks }}"
+    tags:
+      - routing
+
+
+
+
+

@@ -1,0 +1,10 @@
+---
+hostname: R3
+interfaces:
+    - name: GigabitEthernet2
+      address: 10.10.23.2/24
+      desc: Link to R2
+ospf_networks:
+    - network: "10.10.23.2 0.0.0.255"
+      area: "0"
+      process_id: "1"

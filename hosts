@@ -1,0 +1,12 @@
+#Please modify as you see it fit your own lab
+[routers]
+R1 ansible_host=192.168.1.7
+R2 ansible_host=192.168.1.8
+R3 ansible_host=192.168.1.10
+
+#Please modify as you see it fit your own lab
+[routers:vars]
+ansible_user=cisco
+ansible_password=cisco123!
+ansible_connection=network_cli
+ansible_network_os=ios
